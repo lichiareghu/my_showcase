@@ -161,7 +161,7 @@ build_project() {
 setup_pm2() {
     print_status "Setting up PM2 ecosystem..."
     
-    cat > ecosystem.config.js << EOF
+    cat > ecosystem.config.cjs << EOF
 module.exports = {
   apps: [{
     name: '$PROJECT_NAME',
@@ -201,7 +201,7 @@ start_application() {
     npm run db:push
     
     # Start with PM2
-    pm2 start ecosystem.config.js
+    pm2 start ecosystem.config.cjs
     
     # Save PM2 configuration
     pm2 save
