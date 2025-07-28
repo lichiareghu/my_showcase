@@ -14,6 +14,7 @@ pm2 delete portfolio-showcase 2>/dev/null || true
 # Remove old ecosystem config files
 rm -f ecosystem.config.js
 rm -f ecosystem.config.cjs
+rm -f ecosystem.config.mjs
 
 echo "PM2 processes cleaned up."
 
