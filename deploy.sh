@@ -87,6 +87,13 @@ setup_database() {
     sudo -u postgres psql -c "CREATE USER portfolio_user WITH PASSWORD 'portfolio_password';"
     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE portfolio_db TO portfolio_user;"
     
+    # Grant schema permissions
+    sudo -u postgres psql -d portfolio_db -c "GRANT ALL ON SCHEMA public TO portfolio_user;"
+    sudo -u postgres psql -d portfolio_db -c "GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO portfolio_user;"
+    sudo -u postgres psql -d portfolio_db -c "GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO portfolio_user;"
+    sudo -u postgres psql -d portfolio_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO portfolio_user;"
+    sudo -u postgres psql -d portfolio_db -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO portfolio_user;"
+    
     print_success "Database setup completed"
 }
 
