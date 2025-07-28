@@ -172,7 +172,7 @@ setup_pm2() {
 module.exports = {
   apps: [{
     name: '$PROJECT_NAME',
-    script: 'server/index.ts',
+    script: 'dist/index.js',
     instances: 'max',
     exec_mode: 'cluster',
     env: {
