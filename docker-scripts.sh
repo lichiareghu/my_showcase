@@ -26,7 +26,7 @@ print_warning() {
 case "${1:-}" in
     "build")
         print_info "Building production Docker image..."
-        docker build -t portfolio-showcase .
+        docker build -f Dockerfile.simple -t portfolio-showcase .
         print_success "Production image built successfully!"
         ;;
     "build-dev")

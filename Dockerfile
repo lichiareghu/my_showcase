@@ -17,7 +17,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the application
+# Ensure all dependencies are available and build the application
+RUN npm install
 RUN npm run build
 
 # Production image, copy all the files and run the app
@@ -34,6 +35,9 @@ RUN adduser --system --uid 1001 nextjs
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
+
+# Install only production dependencies for the final image
+RUN npm ci --only=production
 
 # Copy necessary config files
 COPY --from=builder /app/drizzle.config.ts ./drizzle.config.ts
