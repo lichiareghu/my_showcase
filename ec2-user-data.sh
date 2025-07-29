@@ -43,6 +43,11 @@ log_message "Installing Docker Compose..."
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 
+# Fix Docker permissions for ubuntu user
+log_message "Setting up Docker permissions..."
+usermod -aG docker ubuntu
+systemctl restart docker
+
 # Install Node.js
 log_message "Installing Node.js..."
 curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
@@ -64,6 +69,11 @@ chmod -R 755 "$PROJECT_DIR"
 
 # Make Docker scripts executable
 chmod +x docker-scripts.sh
+
+# Verify Docker permissions
+log_message "Verifying Docker permissions..."
+# Switch to ubuntu user context to test Docker access
+su - ubuntu -c "docker ps" || log_message "Docker permissions verification failed, but continuing..."
 
 # Create environment file
 log_message "Creating environment file..."
@@ -102,11 +112,11 @@ systemctl start fail2ban
 log_message "Building and starting the application..."
 cd "$PROJECT_DIR"
 
-# Build the Docker image
-./docker-scripts.sh build
+# Build the Docker image (as ubuntu user)
+su - ubuntu -c "cd $PROJECT_DIR && ./docker-scripts.sh build"
 
-# Start the application
-./docker-scripts.sh up
+# Start the application (as ubuntu user)
+su - ubuntu -c "cd $PROJECT_DIR && ./docker-scripts.sh up"
 
 # Wait for services to be ready
 log_message "Waiting for services to be ready..."
@@ -114,7 +124,7 @@ sleep 30
 
 # Push database schema
 log_message "Setting up database schema..."
-./docker-scripts.sh db-push
+su - ubuntu -c "cd $PROJECT_DIR && ./docker-scripts.sh db-push"
 
 # Create systemd service for auto-restart
 log_message "Creating systemd service for auto-restart..."
