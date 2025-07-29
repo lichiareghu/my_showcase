@@ -33,6 +33,8 @@ A modern full-stack portfolio website built with React, Express, and PostgreSQL.
 
 ## 📦 Installation
 
+### Option 1: Local Development
+
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
@@ -63,6 +65,56 @@ A modern full-stack portfolio website built with React, Express, and PostgreSQL.
    ```bash
    npm run dev
    ```
+
+### Option 2: Docker (Recommended)
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd my_showcase
+   ```
+
+2. **Make the Docker script executable**
+   ```bash
+   chmod +x docker-scripts.sh
+   ```
+
+3. **Start development environment**
+   ```bash
+   ./docker-scripts.sh up-dev
+   ```
+
+4. **Push database schema**
+   ```bash
+   ./docker-scripts.sh db-push-dev
+   ```
+
+5. **Access your application**
+   - Main app: http://localhost:5000
+   - Vite dev server: http://localhost:5173
+
+#### Docker Commands
+
+```bash
+# Development
+./docker-scripts.sh up-dev      # Start development environment
+./docker-scripts.sh logs-dev    # View development logs
+./docker-scripts.sh down        # Stop all containers
+
+# Production
+./docker-scripts.sh build       # Build production image
+./docker-scripts.sh up          # Start production environment
+./docker-scripts.sh logs        # View production logs
+
+# Database
+./docker-scripts.sh db-push     # Push schema (production)
+./docker-scripts.sh db-push-dev # Push schema (development)
+
+# Maintenance
+./docker-scripts.sh clean       # Clean up Docker resources
+./docker-scripts.sh restart     # Restart production
+./docker-scripts.sh restart-dev # Restart development
+```
 
 ## 🗂️ Project Structure
 
