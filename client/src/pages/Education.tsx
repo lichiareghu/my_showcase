@@ -6,129 +6,106 @@ import { GraduationCap, Award, BookOpen, Calendar } from "lucide-react";
 const Education = () => {
   const education = [
     {
-      degree: "Bachelor of Science in Computer Science",
-      institution: "University of Technology",
-      location: "San Francisco, CA",
-      period: "2015 - 2019",
-      gpa: "3.8/4.0",
-      honors: "Magna Cum Laude",
-      description: "Specialized in software engineering and web development with a focus on algorithms, data structures, and system design.",
+      degree: "Master of Technology in Microelectronics and VLSI Design",
+      institution: "National Institute of Technology, Calicut",
+      location: "Kerala, India",
+      period: "2006 - 2008",
+      gpa: "8.69/10",
+      honors: "Second Top scorer in the department",
+      description: "Specialized in Microelectronics and MOS Device Modeling",
       coursework: [
-        "Data Structures & Algorithms",
-        "Software Engineering",
-        "Database Systems",
-        "Computer Networks",
-        "Operating Systems",
-        "Web Development",
-        "Machine Learning",
-        "Computer Graphics",
+        "Semiconductor Device Theory",
+        "Digital Integrated Sytem Design",
+        "MOS Device Modelling",
       ],
       projects: [
-        "Senior Capstone: E-commerce Platform with React and Node.js",
-        "Distributed Chat Application using WebSockets",
-        "Machine Learning Model for Stock Price Prediction",
-        "Mobile Game Development with Unity",
+        "Senior Capstone: Effect of gate underlap in double gate SOI FINFET",
+      ],
+    },
+    {
+      degree: "Bachelor of Technology in Electronics and Communication Engineering",
+      institution: "Cochin University of Science and Technology",
+      location: "Kerala, India",
+      period: "2000 - 2004",
+      gpa: "7.5/10",
+      honors: "Top scorer in the department",
+      description: "Specialized in Electronics and communication engineering with focus on GSM Mobile Telecommunication",
+      coursework: [
+        "Computer Networks",
+        "VLSI System Design",
+        "Digital Communication",
+      ],
+      projects: [
+        "Senior Capstone: Communication module for Rocket Launching trajectory correction",
       ],
     },
   ];
 
   const certifications = [
     {
-      title: "AWS Solutions Architect Professional",
-      issuer: "Amazon Web Services",
-      date: "2023",
-      expiry: "2026",
-      credentialId: "AWS-ASA-2023-001",
-      description: "Advanced certification in designing and deploying scalable systems on AWS.",
-      skills: ["Cloud Architecture", "Security", "Cost Optimization", "Migration"],
+      title: "Introduction to LangGraph",
+      issuer: "LangChain Academy",
+      date: "2025",
+      expiry: "Lifetime",
+      credentialId: "s0jdlmqoym",
+      description: "Advanced certification in LangGraph Agentic Framework",
+      skills: ["LangGraph"],
       logo: "☁️",
       color: "bg-orange-100 text-orange-800",
     },
     {
-      title: "Google Cloud Professional Developer",
-      issuer: "Google Cloud Platform",
-      date: "2023",
-      expiry: "2025",
-      credentialId: "GCP-DEV-2023-002",
-      description: "Professional certification in building scalable applications on Google Cloud.",
-      skills: ["App Engine", "Cloud Functions", "BigQuery", "Kubernetes"],
+      title: "AI Solutions Architecture",
+      issuer: "ELVTR",
+      date: "2024",
+      expiry: "Lifetime",
+      description: "Professional certification in architecting AI solutions.",
+      skills: ["Amazon Bedrock", "Intelligent Document Processing", "Agentic AI"],
       logo: "🔴",
       color: "bg-blue-100 text-blue-800",
     },
     {
-      title: "React Developer Certification",
-      issuer: "Meta (Facebook)",
-      date: "2021",
+      title: "Python and Apps Kickstarter course",
+      issuer: "Code First Girls",
+      date: "2024",
       expiry: "Lifetime",
-      credentialId: "META-REACT-2021",
-      description: "Advanced React development patterns, state management, and performance optimization.",
-      skills: ["React Hooks", "State Management", "Performance", "Testing"],
+      credentialId: "CK24SWABP",
+      description: "Basic course in python development",
+      skills: ["Python"],
       logo: "⚛️",
       color: "bg-cyan-100 text-cyan-800",
     },
     {
-      title: "Kubernetes Application Developer",
-      issuer: "Cloud Native Computing Foundation",
-      date: "2022",
-      expiry: "2025",
-      credentialId: "CKAD-2022-003",
-      description: "Certification in designing and building applications for Kubernetes.",
-      skills: ["Pod Design", "Configuration", "Multi-Container", "Observability"],
+      title: "Introduction to Data and SQL",
+      issuer: "Code First Girls",
+      date: "2023",
+      expiry: "Lifetime",
+      credentialId: "CK23LDNBTD",
+      description: "Basic database course in MySQL.",
+      skills: ["SQL", "Database Design"],
       logo: "🚢",
       color: "bg-purple-100 text-purple-800",
     },
     {
-      title: "MongoDB Developer Certification",
-      issuer: "MongoDB University",
-      date: "2020",
+      title: "Tableau Desktop Certified Associate",
+      issuer: "Simplilearn",
+      date: "2022",
       expiry: "Lifetime",
-      credentialId: "MONGO-DEV-2020",
-      description: "Comprehensive certification in MongoDB development and administration.",
-      skills: ["Aggregation", "Indexing", "Replication", "Sharding"],
+      credentialId: "3213186",
+      description: "Professional certification in Tableau Desktop.",
+      skills: ["Dashboard Development", "Data Cleaning", "Data Analysis"],
       logo: "🍃",
       color: "bg-green-100 text-green-800",
     },
     {
-      title: "Scrum Master Certification",
-      issuer: "Scrum Alliance",
+      title: "Machine Learning Advanced Certification Training",
+      issuer: "Simplilearn",
       date: "2021",
-      expiry: "2024",
-      credentialId: "CSM-2021-004",
-      description: "Certified Scrum Master focusing on agile project management and team leadership.",
-      skills: ["Agile Methodology", "Team Leadership", "Sprint Planning", "Retrospectives"],
+      expiry: "Lifetime",
+      credentialId: "2869506",
+      description: "Basic course on Machine Learning model development.",
+      skills: ["Regression","Random Forest", "Gradient Boosting", "Neural Networks"],
       logo: "🎯",
       color: "bg-yellow-100 text-yellow-800",
-    },
-  ];
-
-  const onlineCourses = [
-    {
-      title: "Advanced React Patterns",
-      platform: "Egghead.io",
-      instructor: "Kent C. Dodds",
-      date: "2023",
-      hours: "12 hours",
-    },
-    {
-      title: "Microservices with Docker and Kubernetes",
-      platform: "Udemy",
-      instructor: "Stephen Grider",
-      date: "2022",
-      hours: "25 hours",
-    },
-    {
-      title: "GraphQL with React",
-      platform: "Pluralsight",
-      instructor: "Adhithi Ravichandran",
-      date: "2022",
-      hours: "8 hours",
-    },
-    {
-      title: "Advanced TypeScript",
-      platform: "Frontend Masters",
-      instructor: "Mike North",
-      date: "2021",
-      hours: "15 hours",
     },
   ];
 
@@ -255,30 +232,6 @@ const Education = () => {
                 
                 <div className="text-xs text-slate-500">
                   Credential ID: {cert.credentialId}
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Online Learning */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-slate-900 mb-12 text-center">
-            <BookOpen className="inline-block mr-2 h-8 w-8 text-primary" />
-            Continuous Learning
-          </h2>
-          
-          <div className="grid md:grid-cols-2 gap-6">
-            {onlineCourses.map((course, index) => (
-              <Card key={index} className="p-6">
-                <h3 className="font-semibold text-slate-900 mb-2">{course.title}</h3>
-                <p className="text-primary font-medium mb-1">{course.platform}</p>
-                <p className="text-slate-600 text-sm mb-2">Instructor: {course.instructor}</p>
-                <div className="flex justify-between items-center">
-                  <Badge variant="outline" className="text-xs">{course.date}</Badge>
-                  <span className="text-xs text-slate-500">{course.hours}</span>
                 </div>
               </Card>
             ))}

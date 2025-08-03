@@ -21,14 +21,15 @@ const ProjectDetail = () => {
       title: "AI-Powered ESG Research System",
       subtitle: "Advanced AI-driven sustainability analysis platform",
       description: "A comprehensive, production-ready ESG research system that leverages cutting-edge AI technologies to analyze companies' sustainability practices. The platform uses intelligent query generation, advanced document processing, vector embeddings for semantic search, and AI-powered content analysis to deliver detailed ESG reports with source verification.",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&h=600",
+      image: "https://images.unsplash.com/photo-1753191326444-f00046939b59?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       technologies: ["Python", "OpenAI API", "FAISS", "DuckDuckGo API", "BeautifulSoup", "Pydantic", "Vector Embeddings", "AI/ML", "Selenium", "PyMuPDF", "Conda", "Docker"],
       category: "AI/ML Development",
       year: "2024",
       client: "ESG Research Platform",
-      duration: "8 months",
+      duration: "2 months",
       team: "Solo Developer",
       myRole: "Full-Stack AI Developer",
+      githubUrl: "https://github.com/lichiareghu/web_crawler",
       challenge: "Building a comprehensive ESG research system that could intelligently analyze companies' sustainability practices across multiple data sources, process various document formats, and generate detailed reports while maintaining cost-effectiveness and scalability.",
       solution: "Developed a modular AI-powered system with intelligent query generation, advanced document processing capabilities, vector embeddings for semantic search, and budget-friendly API integration. Implemented comprehensive testing, logging, and configuration management for production deployment.",
       features: [
@@ -264,10 +265,19 @@ const ProjectDetail = () => {
                   <ExternalLink className="mr-2 h-4 w-4" />
                   Live Demo
                 </Button>
-                <Button variant="outline">
-                  <Github className="mr-2 h-4 w-4" />
-                  View Code
-                </Button>
+                {project.githubUrl ? (
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="outline">
+                      <Github className="mr-2 h-4 w-4" />
+                      View Code
+                    </Button>
+                  </a>
+                ) : (
+                  <Button variant="outline">
+                    <Github className="mr-2 h-4 w-4" />
+                    View Code
+                  </Button>
+                )}
               </div>
             </div>
             
@@ -404,10 +414,19 @@ const ProjectDetail = () => {
                     <ExternalLink className="mr-2 h-4 w-4" />
                     Live Demo
                   </Button>
-                  <Button variant="outline" className="w-full justify-start">
-                    <Github className="mr-2 h-4 w-4" />
-                    Source Code
-                  </Button>
+                  {project.githubUrl ? (
+                    <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="block">
+                      <Button variant="outline" className="w-full justify-start">
+                        <Github className="mr-2 h-4 w-4" />
+                        Source Code
+                      </Button>
+                    </a>
+                  ) : (
+                    <Button variant="outline" className="w-full justify-start">
+                      <Github className="mr-2 h-4 w-4" />
+                      Source Code
+                    </Button>
+                  )}
                 </div>
               </Card>
             </div>

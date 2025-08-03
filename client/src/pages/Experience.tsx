@@ -19,7 +19,6 @@ const Experience = () => {
         "Created custom embedding models using Sentence Transformers for semantic understanding",
         "Implemented fault-tolerant AI systems with 99.9% uptime in production",
         "Reduced AI model inference time by 60% through optimization techniques",
-        "Mentored 2 junior developers in AI/ML best practices and system design",
       ],
       technologies: ["Python", "OpenAI API", "LangGraph", "Sentence Transformers", "FAISS", "Docker", "AWS", "PostgreSQL"],
       current: true,
@@ -43,54 +42,100 @@ const Experience = () => {
       current: false,
     },
     {
-      title: "Junior Developer",
-      company: "StartupXYZ",
-      location: "San Francisco, CA",
-      period: "2019 - 2020",
+      title: "Sub Divisional Engineer",
+      company: "BSNL",
+      location: "Kerala, India",
+      period: "2021 - 2022",
       duration: "1 year",
       type: "Full-time",
-      description: "Built responsive web applications, collaborated with design team, and contributed to open-source projects. Gained experience in agile development practices.",
+      description: "Led telecommunications infrastructure projects, managed network operations, and supervised maintainance teams. Oversaw maintenance of telecom equipment and coordinated with vendors for network upgrades and expansions.",
       achievements: [
-        "Developed 5 responsive web applications with 99.9% uptime",
-        "Contributed to 3 open-source projects with 1000+ GitHub stars",
-        "Implemented responsive designs improving mobile user experience",
-        "Participated in code reviews improving team code quality standards",
-        "Collaborated in agile sprints with consistent sprint goal achievement",
+        "Developed Bespoke ETL pipeline for technical reporting of GSM Mobile core network",
+        "Designed and implemented report to track network traffic of POI (Point of Interconnection)",
+        "Automated the process of generating daily reports for Voice Traffic, Kerala",
+        "Developed a report to recommend traffic rerouting for optimal network performance",
+        "Mentored 1 junior engineer in data analysis, reporting and Telecom Operations and Maintainance",
       ],
-      technologies: ["JavaScript", "React", "Express", "MongoDB", "Git"],
+      technologies: ["Python", "Pandas", "SQL", "Telecom"],
       current: false,
     },
+    {
+      title: "Junior Telecom Officer",
+      company: "BSNL",
+      location: "India",
+      period: "2022 - 2009",
+      duration: "13 years",
+      type: "Full-time",
+      description: "Worked as a Junior Telecom Officer in BSNL, Kerala. My responsibilities included managing network operations, supervising maintainance teams, and coordinating with vendors for network upgrades and expansions.",
+      achievements: [
+        "Managed network operations and maintained telecom equipments for different stations",
+        "Supervised maintainance teams and coordinated with vendors for network upgrades",
+        "Managed customer complaints and resolved them within the SLA",
+        "Mentored junior engineers on equipment maintainance and operations",
+      ],
+      technologies: ["Python", "Pandas", "SQL", "Telecom"],
+      current: false,
+    }, 
+    {
+      title: "Lecturer",
+      company: "Amrita Vishwa Vidyapeetham",
+      location: "Tamil Nadu, India",
+      period: "2004 - 2008",
+      duration: "4 years",
+      type: "Full-time",
+      description: "Worked as a Lecturer in Amrita Vishwa Vidyapeetham, Kerala. My responsibilities included teaching students and conducting research.",
+      achievements: [
+        "Taught students in the field of Electronics and Communication Engineering",
+        "Conducted research in the field of Electronics and Communication Engineering",
+        "Mentored students in the field of Electronics and Communication Engineering serving as their advisor",
+      ],
+      technologies: ["Engineering Laboratory"],
+      current: false,
+    },           
   ];
 
   const certifications = [
     {
-      title: "AWS Solutions Architect Professional",
-      issuer: "Amazon Web Services",
-      date: "2023",
-      credential: "AWS-ASA-2023-001",
-      logo: "☁️",
+      title: "Introduction to LangGraph",
+      issuer: "LangChain Academy",
+      date: "2025-06-15",
+      credential: "s0jdlmqoym",
+      logo: "🦜",
     },
     {
-      title: "Google Cloud Professional Developer",
-      issuer: "Google Cloud",
-      date: "2023",
-      credential: "GCP-DEV-2023-002",
+      title: "AI Solutions Architecture",
+      issuer: "ELVTR",
+      date: "2024",
       logo: "🔴",
     },
     {
-      title: "React Developer Certification",
-      issuer: "Meta (Facebook)",
-      date: "2021",
-      credential: "META-REACT-2021",
+      title: "Python and Apps Kickstarter course",
+      issuer: "Code First Girls",
+      date: "2024",
+      credential: "CK24SWABP",
       logo: "⚛️",
     },
     {
-      title: "Kubernetes Application Developer",
-      issuer: "CNCF",
-      date: "2022",
-      credential: "CKAD-2022-003",
+      title: "Introduction to Data and SQL",
+      issuer: "Code First Girls",
+      date: "2023",
+      credential: "CK23LDNBTD",
       logo: "🚢",
     },
+    {
+      title: "Tableau Desktop Certified Associate",
+      issuer: "Simplilearn",
+      date: "2022",
+      credential: "3213186",
+      logo: "🚢",
+    },   
+    {
+      title: "Machine Learning Advanced Certification Training",
+      issuer: "Simplilearn",
+      date: "2021",
+      credential: "2869506",
+      logo: "🚢",
+    },      
   ];
 
   return (
@@ -104,8 +149,8 @@ const Experience = () => {
             Career <span className="text-primary">Experience</span>
           </h1>
           <p className="text-xl text-slate-600 leading-relaxed">
-            My professional journey through the world of software development,
-            building expertise and delivering impactful solutions.
+            My professional journey through AI development, data analysis, reporting, telecom operations and teaching,
+            building insights and delivering actionable solutions.
           </p>
         </div>
       </section>
@@ -224,7 +269,7 @@ const Experience = () => {
             <div>
               <h3 className="text-xl font-semibold text-slate-900 mb-4">Technical Leadership</h3>
               <p className="text-slate-600">
-                Leading development teams, architectural decisions, and mentoring junior developers.
+                Leading maintainance teams, architectural decisions, and mentoring junior developers.
               </p>
             </div>
             <div>

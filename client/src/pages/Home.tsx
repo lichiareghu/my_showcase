@@ -42,6 +42,7 @@ const Home = () => {
       image: "https://images.unsplash.com/photo-1753191326444-f00046939b59?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
       tech: ["Python", "OpenAI API", "FAISS", "AI/ML"],
       techColors: ["bg-blue-100 text-blue-800", "bg-green-100 text-green-800", "bg-purple-100 text-purple-800", "bg-orange-100 text-orange-800"],
+      githubUrl: "https://github.com/lichiareghu/web_crawler",
     },
     {
       id: "research-assistant",
@@ -114,13 +115,13 @@ const Home = () => {
                 </Link>
               </div>
               <div className="flex gap-6 justify-center lg:justify-start mt-8">
-                <a href="#" className="text-slate-600 hover:text-primary smooth-transition text-xl">
+                <a href="https://www.linkedin.com/in/lichiareghu" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-primary smooth-transition text-xl">
                   <Linkedin className="h-6 w-6" />
                 </a>
-                <a href="#" className="text-slate-600 hover:text-primary smooth-transition text-xl">
+                <a href="https://github.com/lichiareghu" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-primary smooth-transition text-xl">
                   <Github className="h-6 w-6" />
                 </a>
-                <a href="#" className="text-slate-600 hover:text-primary smooth-transition text-xl">
+                <a href="mailto:lichiareghu@gmail.com" className="text-slate-600 hover:text-primary smooth-transition text-xl">
                   <Mail className="h-6 w-6" />
                 </a>
               </div>
@@ -223,9 +224,21 @@ const Home = () => {
                       <span className="text-primary hover:text-primary/80 smooth-transition">
                         <ExternalLink className="inline mr-1 h-4 w-4" />View Details
                       </span>
-                      <span className="text-slate-600 hover:text-slate-800 smooth-transition">
-                        <Github className="inline mr-1 h-4 w-4" />Code
-                      </span>
+                      {project.githubUrl ? (
+                        <a 
+                          href={project.githubUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-slate-600 hover:text-slate-800 smooth-transition"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Github className="inline mr-1 h-4 w-4" />Code
+                        </a>
+                      ) : (
+                        <span className="text-slate-600 hover:text-slate-800 smooth-transition">
+                          <Github className="inline mr-1 h-4 w-4" />Code
+                        </span>
+                      )}
                     </div>
                   </div>
                 </Card>
@@ -252,11 +265,14 @@ const Home = () => {
                 AI Engineer specializing in Agentic AI and RAG systems, turning cutting-edge ideas into real-world impact.
               </p>
               <div className="flex gap-4">
-                <a href="#" className="hover:text-white smooth-transition">
+                <a href="https://www.linkedin.com/in/lichiareghu" target="_blank" rel="noopener noreferrer" className="hover:text-white smooth-transition">
                   <Linkedin className="h-5 w-5" />
                 </a>
-                <a href="#" className="hover:text-white smooth-transition">
+                <a href="https://github.com/lichiareghu" target="_blank" rel="noopener noreferrer" className="hover:text-white smooth-transition">
                   <Github className="h-5 w-5" />
+                </a>
+                <a href="mailto:lichiareghu@gmail.com" className="hover:text-white smooth-transition">
+                  <Mail className="h-5 w-5" />
                 </a>
               </div>
             </div>
