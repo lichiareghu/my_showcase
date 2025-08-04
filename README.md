@@ -66,7 +66,7 @@ A modern full-stack portfolio website built with React, Express, and PostgreSQL.
    npm run dev
    ```
 
-### Option 2: Docker (Recommended)
+### Option 2: Docker (Recommended for Production)
 
 1. **Clone the repository**
    ```bash
@@ -74,46 +74,41 @@ A modern full-stack portfolio website built with React, Express, and PostgreSQL.
    cd my_showcase
    ```
 
-2. **Make the Docker script executable**
+2. **Create environment file**
    ```bash
-   chmod +x docker-scripts.sh
+   cp .env.example .env
    ```
+   
+   Edit `.env` with your production settings.
 
-3. **Start development environment**
+3. **Start with Docker Compose**
    ```bash
-   ./docker-scripts.sh up-dev
+   docker-compose up -d
    ```
 
 4. **Push database schema**
    ```bash
-   ./docker-scripts.sh db-push-dev
+   docker-compose exec app npm run db:push
    ```
 
 5. **Access your application**
    - Main app: http://localhost:5000
-   - Vite dev server: http://localhost:5173
 
 #### Docker Commands
 
 ```bash
-# Development
-./docker-scripts.sh up-dev      # Start development environment
-./docker-scripts.sh logs-dev    # View development logs
-./docker-scripts.sh down        # Stop all containers
-
 # Production
-./docker-scripts.sh build       # Build production image
-./docker-scripts.sh up          # Start production environment
-./docker-scripts.sh logs        # View production logs
+docker-compose up -d          # Start production environment
+docker-compose down           # Stop all containers
+docker-compose logs -f app    # View application logs
+docker-compose restart        # Restart all services
 
 # Database
-./docker-scripts.sh db-push     # Push schema (production)
-./docker-scripts.sh db-push-dev # Push schema (development)
+docker-compose exec app npm run db:push  # Push schema changes
 
 # Maintenance
-./docker-scripts.sh clean       # Clean up Docker resources
-./docker-scripts.sh restart     # Restart production
-./docker-scripts.sh restart-dev # Restart development
+docker-compose down -v        # Stop and remove volumes
+docker system prune -f        # Clean up Docker resources
 ```
 
 ## 🗂️ Project Structure
@@ -162,7 +157,7 @@ This project uses PostgreSQL with Drizzle ORM. You can use:
 
 1. **Local PostgreSQL**: Install PostgreSQL locally
 2. **Neon Database**: Cloud PostgreSQL service (recommended for production)
-3. **Docker**: Run PostgreSQL in a container
+3. **Docker**: Run PostgreSQL in a container (included in docker-compose.yml)
 
 ### Using Neon Database (Recommended)
 
@@ -170,6 +165,34 @@ This project uses PostgreSQL with Drizzle ORM. You can use:
 2. Create a new project
 3. Copy the connection string to your `.env` file
 4. Run `npm run db:push` to set up the schema
+
+## 🚀 Production Deployment
+
+### Docker Deployment
+
+1. **Build and start the application**
+   ```bash
+   docker-compose up -d
+   ```
+
+2. **Set up database schema**
+   ```bash
+   docker-compose exec app npm run db:push
+   ```
+
+3. **Access your application**
+   - Application: http://your-server-ip:5000
+   - With Nginx: http://your-server-ip (port 80)
+
+### Environment Configuration
+
+For production, ensure your `.env` file contains:
+```env
+DATABASE_URL=postgresql://username:password@host:port/database
+SESSION_SECRET=your-secure-session-secret
+NODE_ENV=production
+PORT=5000
+```
 
 ## 🎨 Customization
 

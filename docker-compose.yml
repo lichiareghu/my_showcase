@@ -19,7 +19,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.simple
+      dockerfile: Dockerfile
     container_name: portfolio_app
     environment:
       - NODE_ENV=production
