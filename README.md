@@ -157,7 +157,7 @@ This project uses PostgreSQL with Drizzle ORM. You can use:
 
 1. **Local PostgreSQL**: Install PostgreSQL locally
 2. **Neon Database**: Cloud PostgreSQL service (recommended for production)
-3. **Docker**: Run PostgreSQL in a container (included in docker-compose.yml)
+3. **External Database**: Any PostgreSQL service (required for production deployment)
 
 ### Using Neon Database (Recommended)
 

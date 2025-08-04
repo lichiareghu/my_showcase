@@ -1,0 +1,188 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Portfolio Showcase - EC2 + Docker Compose (pull from Git, run db:push)
+
+Parameters:
+  GitBranch:
+    Type: String
+    Default: main
+  InstanceType:
+    Type: String
+    Default: t3.micro
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: ''
+    Description: Optional; prefer SSM Session Manager over SSH
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  PublicSubnetId:
+    Type: AWS::EC2::Subnet::Id
+
+  # === App configuration (you can move these to SSM SecureString later) ===
+  DatabaseUrl:
+    Type: String
+    NoEcho: true
+    Description: postgresql://username:password@host:port/database (external database)
+  SessionSecret:
+    Type: String
+    NoEcho: true
+    Description: Your secure random string
+  NodeEnv:
+    Type: String
+    Default: production
+  AppPort:
+    Type: Number
+    Default: 5000
+    Description: Port your app listens on inside the container
+
+Resources:
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal: { Service: ec2.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [ !Ref InstanceRole ]
+
+  WebSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP traffic
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5000
+          ToPort: 5000
+          CidrIp: 0.0.0.0/0
+
+  AL2023Ami:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64
+
+  WebInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile: !Ref InstanceProfile
+      ImageId: !Ref AL2023Ami
+      InstanceType: !Ref InstanceType
+      KeyName: !If [ HasKey, !Ref KeyPairName, !Ref 'AWS::NoValue' ]
+      SubnetId: !Ref PublicSubnetId
+      SecurityGroupIds: [ !Ref WebSecurityGroup ]
+      Tags:
+        - Key: Name
+          Value: portfolio-showcase-web
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+
+          APP_DIR=/opt/my_showcase
+          REPO_URL='https://github.com/lichiareghu/my_showcase.git'
+          REPO_BRANCH='${GitBranch}'
+          APP_PORT='${AppPort}'
+          DB_URL='${DatabaseUrl}'
+          SESSION_SECRET='${SessionSecret}'
+          NODE_ENV='${NodeEnv}'
+
+          # --- System updates ---
+          dnf -y update
+
+          # --- Install Docker & Compose v2 ---
+          dnf -y install docker
+          systemctl enable docker
+          systemctl start docker
+          usermod -aG docker ec2-user || true
+
+          # Compose v2 plugin for Amazon Linux 2023
+          mkdir -p /usr/local/libexec/docker/cli-plugins
+          COMPOSE_URL=$(curl -s https://api.github.com/repos/docker/compose/releases/latest | grep browser_download_url | grep linux-x86_64 | cut -d '"' -f 4)
+          curl -L "$COMPOSE_URL" -o /usr/local/libexec/docker/cli-plugins/docker-compose
+          chmod +x /usr/local/libexec/docker/cli-plugins/docker-compose
+          docker compose version
+
+          # --- Install git ---
+          dnf -y install git
+
+          # --- Fetch app source ---
+          mkdir -p "$APP_DIR"
+          if [ ! -d "$APP_DIR/.git" ]; then
+            git clone --branch "$REPO_BRANCH" "$REPO_URL" "$APP_DIR"
+          else
+            cd "$APP_DIR"
+            git fetch origin
+            git checkout "$REPO_BRANCH"
+            git reset --hard "origin/$REPO_BRANCH"
+          fi
+
+          cd "$APP_DIR"
+
+          # --- Write production .env (from Parameters) ---
+          cat > .env <<EOF
+          DATABASE_URL=${DB_URL}
+          SESSION_SECRET=${SESSION_SECRET}
+          NODE_ENV=${NODE_ENV}
+          PORT=${APP_PORT}
+          EOF
+          chmod 600 .env
+
+          # --- Start services with Docker Compose ---
+          # Note: PostgreSQL service is disabled - using external database
+          docker compose down || true
+          docker compose pull || true
+          docker compose up -d
+
+          # --- Wait for app container to become healthy/ready ---
+          # Try up to ~2 minutes
+          ATTEMPTS=24
+          SVC=app
+          while [ $ATTEMPTS -gt 0 ]; do
+            if docker compose ps --status running | grep -q "$SVC"; then
+              break
+            fi
+            sleep 5
+            ATTEMPTS=$((ATTEMPTS - 1))
+          done
+
+          # --- Run database schema push inside the container ---
+          # This will connect to your external database
+          set +e
+          docker compose exec -T $SVC npm run db:push
+          RC=$?
+          set -e
+          if [ $RC -ne 0 ]; then
+            echo "db:push failed with code $RC; continuing boot (check logs)"
+          fi
+
+          # --- Health file (optional) if nginx serves static content ---
+          mkdir -p ${APP_DIR}/health || true
+          echo "ok" > ${APP_DIR}/health/_health
+
+          # --- Open firewall (Amazon Linux 2023 uses nftables/firewalld off by default) ---
+          # Security Group already allows ingress; nothing further here.
+
+          # --- Helpful logs on first boot ---
+          docker compose ps
+          docker compose logs --tail=100 || true
+
+Conditions:
+  HasKey: !Not [ !Equals [ !Ref KeyPairName, '' ] ]
+
+Outputs:
+  InstancePublicIP:
+    Value: !GetAtt WebInstance.PublicIp
+  WebURLPort80:
+    Value: !Sub "http://${WebInstance.PublicDnsName}"
+  WebURLPort5000:
+    Value: !Sub "http://${WebInstance.PublicDnsName}:5000"

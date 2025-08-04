@@ -1,19 +1,19 @@
 services:
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15-alpine
-    container_name: portfolio_postgres
-    environment:
-      POSTGRES_DB: portfolio_db
-      POSTGRES_USER: portfolio_user
-      POSTGRES_PASSWORD: portfolio_password
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-    networks:
-      - portfolio_network
-    restart: unless-stopped
+  # PostgreSQL Database (Disabled - using external database)
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: portfolio_postgres
+  #   environment:
+  #     POSTGRES_DB: portfolio_db
+  #     POSTGRES_USER: portfolio_user
+  #     POSTGRES_PASSWORD: portfolio_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   networks:
+  #     - portfolio_network
+  #   restart: unless-stopped
 
   # Portfolio Application
   app:
@@ -24,12 +24,10 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5000
-      - DATABASE_URL=postgresql://portfolio_user:portfolio_password@postgres:5432/portfolio_db
-      - SESSION_SECRET=your_session_secret_here_change_this_in_production
+      - DATABASE_URL=${DATABASE_URL}
+      - SESSION_SECRET=${SESSION_SECRET}
     ports:
       - "5000:5000"
-    depends_on:
-      - postgres
     networks:
       - portfolio_network
     restart: unless-stopped
@@ -51,9 +49,6 @@ services:
     networks:
       - portfolio_network
     restart: unless-stopped
-
-volumes:
-  postgres_data:
 
 networks:
   portfolio_network:

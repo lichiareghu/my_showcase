@@ -46,16 +46,19 @@ This guide covers deploying the Portfolio Showcase application to production usi
 
 ## Database Options
 
-### Option 1: Local PostgreSQL (Docker)
-The `docker-compose.yml` includes a PostgreSQL container. No additional setup required.
+### Cloud Database (Required)
+This deployment uses an external PostgreSQL database. You can use:
 
-### Option 2: Cloud Database (Recommended)
-Use a cloud PostgreSQL service like Neon, Supabase, or AWS RDS:
+1. **Neon Database** (Recommended): [neon.tech](https://neon.tech)
+2. **Supabase**: [supabase.com](https://supabase.com)
+3. **AWS RDS**: Amazon's managed PostgreSQL service
+4. **Any other PostgreSQL service**
 
+### Setup Steps:
 1. Create a database instance
 2. Get the connection string
 3. Update `DATABASE_URL` in your `.env` file
-4. Remove the `postgres` service from `docker-compose.yml`
+4. The local PostgreSQL service is disabled in `docker-compose.yml`
 
 ## SSL/HTTPS Setup
 
@@ -108,11 +111,11 @@ docker-compose restart app
 
 ### Backup Database
 ```bash
-# Create backup
-docker-compose exec postgres pg_dump -U portfolio_user portfolio_db > backup.sql
+# Create backup (connect to your external database)
+pg_dump "YOUR_DATABASE_URL" > backup.sql
 
 # Restore backup
-docker-compose exec -T postgres psql -U portfolio_user portfolio_db < backup.sql
+psql "YOUR_DATABASE_URL" < backup.sql
 ```
 
 ### Update Application
