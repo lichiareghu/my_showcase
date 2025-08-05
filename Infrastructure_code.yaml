@@ -182,16 +182,16 @@ Resources:
             git clone ${GitRepoUrl} /tmp/repo
             else
             cd /tmp/repo
-            git pull origin main
+            git fetch origin
+            git reset --hard origin/main
           fi
 
           cd /tmp/repo
 
-          # Build and run Docker image
-          docker build -t my_showcase_image .
+          # Force clean build with no cache
+          docker build --no-cache --pull -t my_showcase_image .
 
-          docker stop my_showcase || true
-          docker rm my_showcase || true
+          # Run the new container
           docker run -d --name my_showcase -p 80:80 my_showcase_image
 
 Outputs:

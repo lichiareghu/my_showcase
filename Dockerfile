@@ -12,8 +12,11 @@ COPY package.json package-lock.json* ./
 # Install all dependencies (including dev dependencies for build)
 RUN npm ci
 
-# Copy source code
+# Copy source code (this layer will change when code changes)
 COPY . .
+
+# Add a build timestamp to force rebuild when needed
+RUN echo "Build timestamp: $(date)" > /app/build-info.txt
 
 # Build the application
 RUN npm run build
