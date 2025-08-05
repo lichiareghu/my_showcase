@@ -21,14 +21,12 @@ This guide covers deploying the Portfolio Showcase application to production usi
    cp .env.example .env
    ```
 
-3. **Configure environment variables**
-   Edit `.env` with your production settings:
-   ```env
-   DATABASE_URL=postgresql://username:password@host:port/database
-   SESSION_SECRET=your-secure-random-string
-   NODE_ENV=production
-   PORT=5000
-   ```
+3. **Configure SSM Parameters**
+   Create the following SSM parameters in AWS Systems Manager:
+   - `/my_showcase/database_url`: Your PostgreSQL connection string
+   - `/my_showcase/session_secret`: A secure random string for session encryption
+   - `/my_showcase/git_repo_url`: Your Git repository URL
+   - `/my_showcase/git_pat`: Your GitHub Personal Access Token (if needed)
 
 4. **Start the application**
    ```bash
@@ -57,7 +55,7 @@ This deployment uses an external PostgreSQL database. You can use:
 ### Setup Steps:
 1. Create a database instance
 2. Get the connection string
-3. Update `DATABASE_URL` in your `.env` file
+3. Store the connection string in SSM parameter `/my_showcase/database_url`
 4. The local PostgreSQL service is disabled in `docker-compose.yml`
 
 ## SSL/HTTPS Setup
@@ -176,3 +174,6 @@ curl http://localhost:5000/api/health
 3. **Optimize images** in the logos directory
 4. **Monitor resource usage** with `docker stats`
 5. **Scale horizontally** if needed by adding more app instances 
+
+## Template URL
+https://s3.eu-central-1.amazonaws.com/cf-templates--br4roionquqe-eu-central-1/template-1754385030500.yaml
