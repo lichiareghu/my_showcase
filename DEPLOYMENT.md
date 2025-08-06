@@ -21,12 +21,10 @@ This guide covers deploying the Portfolio Showcase application to production usi
    cp .env.example .env
    ```
 
-3. **Configure SSM Parameters**
-   Create the following SSM parameters in AWS Systems Manager:
-   - `/my_showcase/database_url`: Your PostgreSQL connection string
-   - `/my_showcase/session_secret`: A secure random string for session encryption
-   - `/my_showcase/git_repo_url`: Your Git repository URL
-   - `/my_showcase/git_pat`: Your GitHub Personal Access Token (if needed)
+3. **Configure Environment Variables**
+   The deployment will use environment variables from the CloudFormation parameters:
+   - `DatabaseUrl`: Your PostgreSQL connection string
+   - `SessionSecret`: A secure random string for session encryption
 
 4. **Start the application**
    ```bash
@@ -55,7 +53,7 @@ This deployment uses an external PostgreSQL database. You can use:
 ### Setup Steps:
 1. Create a database instance
 2. Get the connection string
-3. Store the connection string in SSM parameter `/my_showcase/database_url`
+3. Provide the connection string as CloudFormation parameter `DatabaseUrl`
 4. The local PostgreSQL service is disabled in `docker-compose.yml`
 
 ## SSL/HTTPS Setup

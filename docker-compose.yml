@@ -24,11 +24,11 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5000
-    secrets:
-      - database_url
-      - session_secret
-    ports:
-      - "5000:5000"
+      - DATABASE_URL=${DATABASE_URL}
+      - SESSION_SECRET=${SESSION_SECRET}
+    # Don't expose port 80 directly - let nginx handle it
+    expose:
+      - "5000"
     networks:
       - portfolio_network
     restart: unless-stopped
@@ -53,12 +53,6 @@ services:
 
 networks:
   portfolio_network:
-    driver: bridge
+    driver: bridge 
 
-secrets:
-  database_url:
-    external: true
-    name: /my_showcase/database_url
-  session_secret:
-    external: true
-    name: /my_showcase/session_secret 
+ 

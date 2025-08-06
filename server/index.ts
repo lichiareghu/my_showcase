@@ -6,6 +6,12 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Add debugging middleware
+app.use((req, res, next) => {
+  log(`Request: ${req.method} ${req.path} - NODE_ENV: ${process.env.NODE_ENV}`);
+  next();
+});
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
@@ -51,8 +57,10 @@ app.use((req, res, next) => {
   // setting up all the other routes so the catch-all route
   // doesn't interfere with the other routes
   if (app.get("env") === "development") {
+    log("Setting up Vite development server");
     await setupVite(app, server);
   } else {
+    log("Setting up static file serving for production");
     serveStatic(app);
   }
 

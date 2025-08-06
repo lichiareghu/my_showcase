@@ -78,7 +78,7 @@ A modern full-stack portfolio website built with React, Express, and PostgreSQL.
    ```bash
    cp .env.example .env
    ```
-   
+
    Edit `.env` with your production settings.
 
 3. **Start with Docker Compose**
