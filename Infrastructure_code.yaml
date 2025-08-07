@@ -44,6 +44,8 @@ Resources:
                   - ssm:GetParameter
                   - ssm:GetParameters
                   - ssm:GetParameterHistory
+                  - ssm:PutParameter
+                  - ssm:DeleteParameter
                 Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/*
 
   MyKeyPair:
@@ -122,19 +124,22 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5000
+          ToPort: 5000
+          CidrIp: 0.0.0.0/0          
 
   WebInstance:
     Type: AWS::EC2::Instance
     Properties:
       IamInstanceProfile: !Ref InstanceProfile
-      ImageId: ami-000742a066e2fb5f2
       InstanceType: !Ref InstanceType
       KeyName: !Ref MyKeyPair
       SubnetId: !Ref MyPublicSubnet
       SecurityGroupIds:
         - !Ref WebSecurityGroup
       LaunchTemplate:
-        LaunchTemplateName: LaunchBasic
+        LaunchTemplateName: showcase_template
         Version: 1
       Tags:
         - Key: Name
@@ -147,37 +152,32 @@ Resources:
           # Update system packages
           apt-get update -y
 
-          # Install Git if not present
-          if ! command -v git &> /dev/null; then
-           apt-get install -y git
-          fi
+          # Install required packages
+          apt-get install -y openssh-server
 
-          # Install Docker if not present
-          if ! command -v docker &> /dev/null; then
-            apt-get install -y \
-              ca-certificates \
-              curl \
-              gnupg \
-              lsb-release
+          # Generate SSH key pair for the instance
+          mkdir -p /home/ubuntu/.ssh
+          ssh-keygen -t rsa -b 4096 -f /home/ubuntu/.ssh/id_rsa -N "" -C "instance-generated-key"
+          chown -R ubuntu:ubuntu /home/ubuntu/.ssh
+          chmod 700 /home/ubuntu/.ssh
+          chmod 600 /home/ubuntu/.ssh/id_rsa
+          chmod 644 /home/ubuntu/.ssh/id_rsa.pub
 
-            install -m 0755 -d /etc/apt/keyrings
-            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-            chmod a+r /etc/apt/keyrings/docker.gpg
+          # Add public key to authorized_keys for ubuntu user
+          cat /home/ubuntu/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+          chmod 600 /home/ubuntu/.ssh/authorized_keys
 
-            echo \
-              "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-              $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+          # Start SSH service
+          systemctl enable ssh
+          systemctl start ssh
 
-            apt-get update -y
-            apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-          fi
+          # Store the private key in a location accessible to CloudFormation outputs
+          cat /home/ubuntu/.ssh/id_rsa > /tmp/instance_private_key
+          cat /home/ubuntu/.ssh/id_rsa.pub > /tmp/instance_public_key
 
-          # Start and enable Docker
-          systemctl enable docker
-          systemctl start docker
-
-          # Add ubuntu user to docker group
-          usermod -aG docker ubuntu
+          # Store SSH keys in AWS Systems Manager Parameter Store for retrieval
+          aws ssm put-parameter --name "InstancePrivateKey" --value "$(cat /home/ubuntu/.ssh/id_rsa)" --type "SecureString" --overwrite --region ${AWS::Region} || true
+          aws ssm put-parameter --name "InstancePublicKey" --value "$(cat /home/ubuntu/.ssh/id_rsa.pub)" --type "String" --overwrite --region ${AWS::Region} || true
 
           # Clone or update the latest code
           if [ ! -d "/tmp/repo" ]; then
@@ -287,3 +287,26 @@ Outputs:
   WebURLPort80:
     Description: Application URL (Port 80)
     Value: !Sub http://${WebInstance.PublicDnsName}
+
+  SSHConnectionString:
+    Description: SSH connection command for the instance
+    Value: !Sub ssh -i /path/to/private_key ubuntu@${WebInstance.PublicDnsName}
+
+  SSHInstructions:
+    Description: Instructions for SSH access
+    Value: !Sub |
+      To connect via SSH:
+      1. The instance has generated its own SSH key pair
+      2. The private key is stored in /home/ubuntu/.ssh/id_rsa on the instance
+      3. You can access it via AWS Systems Manager Session Manager
+      4. Or use the AWS CLI: aws ssm start-session --target ${WebInstance}
+      5. Once connected, you can copy the private key: sudo cat /home/ubuntu/.ssh/id_rsa
+      6. Or retrieve from SSM: aws ssm get-parameter --name "/myshowcase/instance-private-key" --with-decryption
+
+  SSMPrivateKeyParameter:
+    Description: SSM Parameter name for the private SSH key
+    Value: "/myshowcase/instance-private-key"
+
+  SSMPublicKeyParameter:
+    Description: SSM Parameter name for the public SSH key
+    Value: "/myshowcase/instance-public-key"
